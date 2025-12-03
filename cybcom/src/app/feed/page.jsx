@@ -6,14 +6,12 @@ import Link from 'next/link'
 import { usePostStore } from '@/store/usePostStore'
 import LogoutButton from '@/components/logoutButton'
 import ProfileButton from '@/components/profileButton'
-import Cookies from 'js-cookie'
+import { findAllPosts } from '@/service/PostService'
 
 export default function Posts() {
-  const [posts, setPosts] = useState([])
-  const [filteredPosts, setFilteredPosts] = useState([])
   const [categories, setCategories] = useState([])
   const { register, watch } = useForm()
-  const {selectPost} = usePostStore()
+  const {posts, setPosts, selectPost} = usePostStore()
 
   const searchTerm = watch('search', '')
   const selectedCategory = watch('category', '')
@@ -22,64 +20,33 @@ export default function Posts() {
     selectPost(postId)
   }
 
-  useEffect(() => {
-    console.log('token:' + Cookies.get('acessToken'));
-    console.log('token:' + Cookies.get('refreshToken'));
-    
-    const mockPosts = [
-      {
-        id: 1,
-        title: "Segurança em APIs REST",
-        category: "Tutoriais",
-        author: "Maria Santos",
-        date: "2024-01-15",
-        excerpt: "Aprenda a proteger suas APIs contra vulnerabilidades comuns...",
-        image: "/api-security.jpg",
-        readTime: "8 min"
-      },
-      {
-        id: 2,
-        title: "Segurança em APIs REST",
-        category: "Tutoriais",
-        author: "Maria Santos",
-        date: "2024-01-15",
-        excerpt: "Aprenda a proteger suas APIs contra vulnerabilidades comuns...",
-        image: "/api-security.jpg",
-        readTime: "8 min"
-      },
-      {
-        id: 3,
-        title: "Segurança em APIs REST",
-        category: "Tutoriais",
-        author: "Maria Santos",
-        date: "2024-01-15",
-        excerpt: "Aprenda a proteger suas APIs contra vulnerabilidades comuns...",
-        image: "/api-security.jpg",
-        readTime: "8 min"
-      }
-      // Mais posts...
-    ]
-    setPosts(mockPosts)
-    setFilteredPosts(mockPosts)
-    setCategories(["Aulas", "Histórias", "Tutoriais", "Ferramentas", "Notícias"])
-  }, [])
+  
 
   useEffect(() => {
-    let filtered = posts
-    
-    if (searchTerm) {
-      filtered = filtered.filter(post => 
-        post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+    async function awaitFindPosts(){
+      let res = await findAllPosts()
+      console.log(res);
+      
+      setPosts(res)
     }
+
+    awaitFindPosts()
     
-    if (selectedCategory) {
-      filtered = filtered.filter(post => post.category === selectedCategory)
-    }
+    // const mockPosts = [
+    //   {
+    //     id: 1,
+    //     title: "Segurança em APIs REST",
+    //     category: "Tutoriais",
+    //     author: "Maria Santos",
+    //     date: "2024-01-15",
+    //     excerpt: "Aprenda a proteger suas APIs contra vulnerabilidades comuns...",
+    //     image: "/api-security.jpg",
+    //     readTime: "8 min"
+    //   }
+    // ]
     
-    setFilteredPosts(filtered)
-  }, [searchTerm, selectedCategory, posts])
+    setCategories(["Aulas", "Histórias", "Tutoriais", "Ferramentas", "Notícias"])
+  }, [posts])
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -143,22 +110,20 @@ export default function Posts() {
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
-              {filteredPosts.map(post => (
+              {posts.map(post => (
                 <div key={post.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition">
-                  <img src={post.image} alt={post.title} className="w-full h-48 object-cover" />
                   <div className="p-6">
-                    <div className="flex items-center justify-between mb-3">
+                    {/* <div className="flex items-center justify-between mb-3">
                       <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-semibold">
                         {post.category}
                       </span>
-                      <span className="text-sm text-gray-500">{post.readTime}</span>
-                    </div>
+                    </div> */}
                     <h3 className="text-xl font-semibold mb-3">{post.title}</h3>
-                    <p className="text-gray-600 mb-4">{post.excerpt}</p>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
                         <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-                        <span className="text-sm text-gray-600">{post.author}</span>
+                        {/* <span className="text-sm text-gray-600">{post.author}</span> */}
+                        {/* <span>{post.content}</span> */}
                       </div>
                       <Link
                         onClick={()=> onSelectPost(post.id)}

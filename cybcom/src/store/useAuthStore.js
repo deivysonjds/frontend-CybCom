@@ -18,12 +18,12 @@ export const useAuthStore = create((set) => ({
         }
     },
 
-    login: (tokens) => {
+    loginStore: (tokens) => {
         Cookies.set('acessToken', tokens.acess, { expires: 1, path: '/' })
         Cookies.set('refreshToken', tokens.refresh, { expires: 7, path: '/' })
         set({ isAuthenticated: true, acessToken: tokens.acess, refreshToken: tokens.refresh })
     },
-    refresh: (token) => {
+    refreshStore: (token) => {
         Cookies.set('acessToken', token, { expires: 1, path: '/' })
         set({ isAuthenticated: true, acessToken: token })
     },

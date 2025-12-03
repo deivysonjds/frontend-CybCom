@@ -6,10 +6,11 @@ import { signinSchema } from '@/schemas/signinSchema'
 import { signin } from '@/service/authService'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useRouter } from 'next/navigation'
+import Cookies from 'js-cookie'
 
 export default function Login() {
   const router = useRouter()
-  const {login} = useAuthStore()
+  const {loginStore} = useAuthStore()
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(signinSchema)
   })
@@ -17,7 +18,7 @@ export default function Login() {
   const onSubmit = async (data) => {
     
     try {
-      const response = signin(data, login)
+      const response = signin(data, loginStore)
     } catch (error) {
       alert("Erro: "+error.message)
     }

@@ -59,31 +59,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Posts Recentes */}
-      <section className="py-16 container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-12">Posts Recentes</h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {recentPosts.map(post => (
-            <div key={post.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition">
-              <img src={post.image} alt={post.title} className="w-full h-48 object-cover" />
-              <div className="p-6">
-                <span className="inline-block bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-semibold">
-                  {post.category}
-                </span>
-                <h3 className="text-xl font-semibold mt-3 mb-2">{post.title}</h3>
-                <p className="text-gray-600 mb-4">{post.excerpt}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-500">Por {post.author}</span>
-                  <Link href={`/post/${post.id}`} className="text-blue-600 font-semibold hover:underline">
-                    Ler mais
-                  </Link>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* Estatísticas */}
       <section className="bg-white py-16">
         <div className="container mx-auto px-4">

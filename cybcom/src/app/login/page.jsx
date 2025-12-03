@@ -6,8 +6,7 @@ import { signinSchema } from '@/schemas/signinSchema'
 import { signin } from '@/service/authService'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useRouter } from 'next/navigation'
-import Cookies from 'js-cookie'
-
+import {FaGoogle, FaGithub} from 'react-icons/fa'
 export default function Login() {
   const router = useRouter()
   const {loginStore} = useAuthStore()
@@ -60,12 +59,12 @@ export default function Login() {
 
         <div className="mt-6 space-y-4">
           <button className="w-full flex items-center justify-center gap-3 border border-gray-300 py-3 rounded-lg hover:bg-gray-50 transition">
-            <img src="/google-icon.svg" alt="Google" className="w-5 h-5" />
+            <FaGoogle size={30} />
             Continuar com Google
           </button>
           
           <button className="w-full flex items-center justify-center gap-3 border border-gray-300 py-3 rounded-lg hover:bg-gray-50 transition">
-            <img src="/github-icon.svg" alt="GitHub" className="w-5 h-5" />
+            <FaGithub size={30} />
             Continuar com GitHub
           </button>
         </div>

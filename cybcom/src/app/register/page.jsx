@@ -2,9 +2,10 @@
 "use client"
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
 import Link from 'next/link'
 import { signupSchema } from '@/schemas/signupSchema'
+import { signup } from '@/service/authService'
+import { useState } from 'react'
 
 export default function Register() {
   const { register, handleSubmit, formState: { errors } } = useForm({
@@ -13,14 +14,17 @@ export default function Register() {
 
   const onSubmit = async (data) => {
     try {
-      await axios.post('/api/auth/register', data)
-      // Redirecionar para login
+      let res = await signup(data)
+      if (res) {
+        window.location.href = '/login'
+      }
     } catch (error) {
-      console.error('Erro no cadastro:', error)
+      alert('Erro de cadastro')
     }
   }
 
   return (
+    
     <div className="min-h-screen bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
         <h2 className="text-3xl font-bold text-center mb-8">Criar Conta</h2>
@@ -30,7 +34,7 @@ export default function Register() {
             <input
               {...register('name')}
               type="text"
-              placeholder="Nome completo"
+              placeholder="nome"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}

@@ -2,20 +2,15 @@ import axios from "axios";
 import Cookies from "js-cookie";
 const URL_BASE = `${process.env.NEXT_PUBLIC_API}/auth`
 
-import { jwtDecode } from "jwt-decode";
-
-export function isTokenExpired(token) {
-    if (!token) return false;
-
-    try {
-        const decoded = jwtDecode(token);
-        const currentTime = Date.now() / 1000;
-
-        return decoded.exp && decoded.exp < currentTime;
-
-    } catch (e) {
-        return false;
-    }
+export async function signup(data) {
+    let res = axios.post(`${URL_BASE}/signup`, data)
+        .then((res)=>{
+            return true
+        }).catch(()=>{
+            return false
+        })
+    
+    return res
 }
 
 export async function signin(data, login) {

@@ -1,13 +1,13 @@
-// pages/index.js
 "use client"
 import Head from 'next/head'
 import Link from 'next/link'
 import { useAuthStore } from '@/store/useAuthStore'
+import { useEffect, useState } from 'react'
 
 export default function Home() {
-  const { refreshToken } = useAuthStore()
-  
-  const recentPosts = [
+    const { refreshToken } = useAuthStore()
+    const [isLogged, setIsLogged] = useState(false)
+    const recentPosts = [
     {
       id: 1,
       title: "Introdução à Criptografia Moderna",
@@ -28,6 +28,10 @@ export default function Home() {
     }
   ]
 
+  useEffect(()=>{
+    setIsLogged(!!refreshToken)
+  },[refreshToken])
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Head>
@@ -43,12 +47,12 @@ export default function Home() {
           <p className="text-xl mb-8 opacity-90">
             Junte-se à maior comunidade de segurança digital do Brasil
           </p>
-          {!refreshToken ? (
+          {!isLogged ? (
             <Link href="/login" className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
               Entrar na Comunidade
             </Link>
           ) : (
-            <Link href="/posts" className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+            <Link href="/feed" className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
               Ver Posts Recentes
             </Link>
           )}
@@ -70,7 +74,7 @@ export default function Home() {
                 <p className="text-gray-600 mb-4">{post.excerpt}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">Por {post.author}</span>
-                  <Link href={`/posts/${post.id}`} className="text-blue-600 font-semibold hover:underline">
+                  <Link href={`/post/${post.id}`} className="text-blue-600 font-semibold hover:underline">
                     Ler mais
                   </Link>
                 </div>

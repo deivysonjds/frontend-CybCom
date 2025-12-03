@@ -2,22 +2,24 @@
 "use client"
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
-import Cookies from 'js-cookie'
 import { signinSchema } from '@/schemas/signinSchema'
+import { signin } from '@/service/authService'
+import { useAuthStore } from '@/store/useAuthStore'
+import { useRouter } from 'next/navigation'
 
 export default function Login() {
+  const router = useRouter()
+  const {login} = useAuthStore()
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(signinSchema)
   })
 
   const onSubmit = async (data) => {
+    
     try {
-      const response = await axios.post('/api/auth/login', data)
-      Cookies.set('token', response.data.token)
-      // Redirecionar para home
+      const response = signin(data, login)
     } catch (error) {
-      console.error('Erro no login:', error)
+      alert("Erro: "+error.message)
     }
   }
 

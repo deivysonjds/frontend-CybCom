@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
 import { usePostStore } from '@/store/usePostStore'
+import LogoutButton from '@/components/logoutButton'
+import ProfileButton from '@/components/profileButton'
+import Cookies from 'js-cookie'
 
 export default function Posts() {
   const [posts, setPosts] = useState([])
@@ -20,7 +23,9 @@ export default function Posts() {
   }
 
   useEffect(() => {
-    // Simular dados
+    console.log('token:' + Cookies.get('acessToken'));
+    console.log('token:' + Cookies.get('refreshToken'));
+    
     const mockPosts = [
       {
         id: 1,
@@ -167,6 +172,10 @@ export default function Posts() {
                 </div>
               ))}
             </div>
+          </div>
+          <div className='flex flex-col gap-5 items-center sticky justify-start'>
+              <ProfileButton />
+              <LogoutButton />
           </div>
         </div>
       </div>
